@@ -1,0 +1,4 @@
+db.url=
+db.username=
+db.password=
+changeLogFile=src/main/resources/db/changelog-master.yml
