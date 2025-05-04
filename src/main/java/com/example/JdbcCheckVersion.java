@@ -14,7 +14,7 @@ public class JdbcCheckVersion {
         String user = "jdbcUser";
         String password = "qwerty";
 
-        try (Connection conn = DriverManager.getConnection(url, user, password);) {
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
             DatabaseMetaData meta = conn.getMetaData();
 
             // Версия самого драйвера
