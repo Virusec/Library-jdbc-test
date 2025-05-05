@@ -5,6 +5,7 @@ import com.example.model.Author;
 import com.example.model.Book;
 import com.example.model.Reader;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -166,7 +167,28 @@ public class LibraryDao {
         }
     }
 
-//TODO: Вынести повторяющийся код
+    public void addAuthorAndBookTogether(
+            String authorFirstName,
+            String authorLastName,
+            String bookTitle,
+            int publishedYear,
+            int totalCopies
+    ) throws SQLException {
+        String sql = """
+                CALL add_author_and_book_proc(?,?,?,?,?)
+                """;
+        Connection connection = DbManager.getConnection();
+        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+            callableStatement.setString(1, authorFirstName);
+            callableStatement.setString(2, authorLastName);
+            callableStatement.setString(3, bookTitle);
+            callableStatement.setInt(4,publishedYear);
+            callableStatement.setInt(5, totalCopies);
+            callableStatement.execute();
+        }
+    }
+
+    //TODO: Вынести повторяющийся код
     public List<Book> searchBooks(String keyWord) throws SQLException {
         String sql = """
                 SELECT

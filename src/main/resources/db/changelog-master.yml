@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/create-books.sql
   - include:
       file: db/changelog/create-borrowings.sql
+  - include:
+      file: db/changelog/add_author_and_book_proc.sql

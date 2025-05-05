@@ -88,14 +88,20 @@ public class App {
 //            }
 
             System.out.println("---Добавить книгу и автора в одну транзакцию---");
-
+            libraryDao.addAuthorAndBookTogether(
+                    "Ниолай",
+                    "Гоголь",
+                    "Мертвые души",
+                    1917,
+                    2
+            );
+            printAllBooks(libraryDao.searchBooks("Гоголь"));
 
             System.out.println("---Поиск книг по названию или автору---");
             List<Book> searchBooks = libraryDao.searchBooks("Дост");
             printAllBooks(searchBooks);
 
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DbManager.close();
