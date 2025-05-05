@@ -21,12 +21,9 @@ public class DbManager {
             }
             props.load(input);
 
-            String url = props.getProperty("db.url");
-            String user = props.getProperty("db.username");
-            String password = props.getProperty("db.password");
-//            String driverClassName = props.getProperty("db.driverClassName");
-
-//            Class.forName(driverClassName);
+            String url = props.getProperty("url");
+            String user = props.getProperty("username");
+            String password = props.getProperty("password");
 
             connection = DriverManager.getConnection(url, user, password);
 

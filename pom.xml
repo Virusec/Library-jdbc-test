@@ -19,6 +19,12 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -31,7 +37,6 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>update-db</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>update</goal>

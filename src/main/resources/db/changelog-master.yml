@@ -1,3 +1,9 @@
 databaseChangeLog:
   - include:
       file: db/changelog/create-authors.sql
+  - include:
+      file: db/changelog/create-readers.sql
+  - include:
+      file: db/changelog/create-books.sql
+  - include:
+      file: db/changelog/create-borrowings.sql
