@@ -3,6 +3,7 @@ package com.example.dao;
 import com.example.DbManager;
 import com.example.model.Author;
 import com.example.model.Book;
+import com.example.model.Borrowing;
 import com.example.model.Reader;
 
 import java.sql.CallableStatement;
@@ -15,9 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Класс LibraryDao предоставляет методы для управления библиотекой:
+ * добавления и получения книг, авторов, читателей, а также работы с записями о выдаче книг.
  * @author Anatoliy Shikin
  */
 public class LibraryDao {
+    /**
+     * Добавляет новую книгу в базу данных.
+     *
+     * @param book объект книги
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
     public void addBook(Book book) throws SQLException {
         String sql = """
                 INSERT INTO books(title,author_id,published_year,total_copies)
@@ -33,6 +42,12 @@ public class LibraryDao {
         }
     }
 
+    /**
+     * Добавляет нового автора в базу данных.
+     *
+     * @param author объект автора
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
     public void addAuthor(Author author) throws SQLException {
         String sql = """
                 INSERT INTO authors(first_name,last_name)
@@ -46,6 +61,12 @@ public class LibraryDao {
         }
     }
 
+    /**
+     * Добавляет нового читателя в базу данных.
+     *
+     * @param reader объект читателя
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
     public void addReader(Reader reader) throws SQLException {
         String sql = """
                 INSERT INTO readers(first_name,last_name,email)
@@ -60,6 +81,13 @@ public class LibraryDao {
         }
     }
 
+    /**
+     * Возвращает список всех книг, включая информацию об авторе
+     * и количестве книг "на руках".
+     *
+     * @return список книг
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
     public List<Book> getAllBooks() throws SQLException {
         List<Book> list = new ArrayList<>();
         String sql = """
@@ -97,6 +125,12 @@ public class LibraryDao {
         return list;
     }
 
+    /**
+     * Возвращает список всех зарегистрированных читателей.
+     *
+     * @return список читателей
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
     public List<Reader> getAllReaders() throws SQLException {
         List<Reader> readerList = new ArrayList<>();
         String sql = """
@@ -118,6 +152,12 @@ public class LibraryDao {
         return readerList;
     }
 
+    /**
+     * Возвращает список всех авторов.
+     *
+     * @return список авторов
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
     public List<Author> getAllAuthors() throws SQLException {
         List<Author> authorList = new ArrayList<>();
         String sql = """
@@ -138,6 +178,13 @@ public class LibraryDao {
         return authorList;
     }
 
+    /**
+     * Обновляет данные книги по её идентификатору.
+     *
+     * @param bookId идентификатор книги
+     * @param book   обновлённые данные книги
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
     public void updateBookById(int bookId, Book book) throws SQLException {
         String sql = """
                 UPDATE books
@@ -155,6 +202,12 @@ public class LibraryDao {
         }
     }
 
+    /**
+     * Удаляет книгу из базы данных по её идентификатору.
+     *
+     * @param bookId идентификатор книги
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
     public void deleteBookById(int bookId) throws SQLException {
         String sql = """
                 DELETE FROM books
@@ -167,6 +220,16 @@ public class LibraryDao {
         }
     }
 
+    /**
+     * Вызывает хранимую процедуру для добавления автора и книги одновременно.
+     *
+     * @param authorFirstName имя автора
+     * @param authorLastName  фамилия автора
+     * @param bookTitle       название книги
+     * @param publishedYear   год публикации
+     * @param totalCopies     общее количество экземпляров
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
     public void addAuthorAndBookTogether(
             String authorFirstName,
             String authorLastName,
@@ -182,13 +245,19 @@ public class LibraryDao {
             callableStatement.setString(1, authorFirstName);
             callableStatement.setString(2, authorLastName);
             callableStatement.setString(3, bookTitle);
-            callableStatement.setInt(4,publishedYear);
+            callableStatement.setInt(4, publishedYear);
             callableStatement.setInt(5, totalCopies);
             callableStatement.execute();
         }
     }
 
-    //TODO: Вынести повторяющийся код
+    /**
+     * Выполняет поиск книг по ключевому слову в названии или имени автора.
+     *
+     * @param keyWord ключевое слово для поиска
+     * @return список найденных книг
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
     public List<Book> searchBooks(String keyWord) throws SQLException {
         String sql = """
                 SELECT
@@ -230,5 +299,72 @@ public class LibraryDao {
             }
         }
         return bookList;
+    }
+
+    /**
+     * Добавляет запись о выдаче книги читателю.
+     *
+     * @param readerId идентификатор читателя
+     * @param bookId   идентификатор книги
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
+    public void borrowBook(int readerId, int bookId) throws SQLException {
+        String sql = """
+                INSERT INTO borrowings(reader_id, book_id)
+                VALUES (?, ?)
+                """;
+        Connection connection = DbManager.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, readerId);
+            preparedStatement.setInt(2, bookId);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    /**
+     * Обновляет запись о выдаче книги, устанавливая дату возврата на текущую.
+     *
+     * @param borrowingId идентификатор записи о заимствовании
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
+    public void returnBook(int borrowingId) throws SQLException {
+        String sql = """
+                UPDATE borrowings
+                SET returned_date = CURRENT_DATE
+                WHERE id = ?
+                """;
+        Connection connection = DbManager.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, borrowingId);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    /**
+     * Возвращает список всех выданных книг.
+     *
+     * @return список заимствований
+     * @throws SQLException если возникает ошибка при выполнении SQL-запроса
+     */
+    public List<Borrowing> getAllBorrowings() throws SQLException {
+        var list = new ArrayList<Borrowing>();
+        String sql = """
+                SELECT * FROM borrowings
+                """;
+        Connection connection = DbManager.getConnection();
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                list.add(new Borrowing(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("reader_id"),
+                        resultSet.getInt("book_id"),
+                        resultSet.getDate("borrowed_date").toLocalDate(),
+                        resultSet.getDate("returned_date") != null
+                                ? resultSet.getDate("returned_date").toLocalDate() : null
+                ));
+            }
+        }
+        return list;
     }
 }

@@ -18,34 +18,34 @@ public class App {
             DbManager.getConnection();
             LibraryDao libraryDao = new LibraryDao();
 
-//            Author newAuthor = Author.builder()
-//                    .firstName("Федор")
-//                    .lastName("Достоевский")
-//                    .build();
-//            libraryDao.addAuthor(newAuthor);
+            Author newAuthor = Author.builder()
+                    .firstName("Федор")
+                    .lastName("Достоевский")
+                    .build();
+            libraryDao.addAuthor(newAuthor);
 
-//            Book newBook = Book.builder()
-//                    .title("Записки из подполья")
-//                    .authorId(3)
-//                    .publishedYear(2011)
-//                    .totalCopies(1)
-//                    .build();
-//            libraryDao.addBook(newBook);
+            Book newBook = Book.builder()
+                    .title("Записки из подполья")
+                    .authorId(3)
+                    .publishedYear(2011)
+                    .totalCopies(1)
+                    .build();
+            libraryDao.addBook(newBook);
 
-//            Book newBook = Book.builder()
-//                    .title("Hdajf")
-//                    .authorId(3)
-//                    .publishedYear(2022)
-//                    .totalCopies(7)
-//                    .build();
-//            libraryDao.addBook(newBook);
+            Book newBook2 = Book.builder()
+                    .title("Hdajf")
+                    .authorId(3)
+                    .publishedYear(2022)
+                    .totalCopies(7)
+                    .build();
+            libraryDao.addBook(newBook2);
 
-//            Reader reader = Reader.builder()
-//                    .firstName("Михаил")
-//                    .lastName("Левин")
-//                    .email("mlevin@mail.ru")
-//                    .build();
-//            libraryDao.addReader(reader);
+            Reader reader = Reader.builder()
+                    .firstName("Михаил")
+                    .lastName("Левин")
+                    .email("mlevin@mail.ru")
+                    .build();
+            libraryDao.addReader(reader);
 
             System.out.println("---Все книги в библиотеке---");
             List<Book> allBooks = libraryDao.getAllBooks();
@@ -68,24 +68,24 @@ public class App {
 
 //TODO: Написать поиск по id и добавить здесь вывод обновленной книги
 
-//            System.out.println("---Обновление информации о книге по её id---");
-//            Book bookToUpdate = Book.builder()
-//                    .title("Идиот")
-//                    .authorId(3)
-//                    .publishedYear(2020)
-//                    .totalCopies(4)
-//                    .build();
-//            List<Book> bookList = libraryDao.getAllBooks();
-//            if (!bookList.isEmpty()) {
-//                libraryDao.updateBookById(4, bookToUpdate);
-//                System.out.println("Книга успешно обновлена.");
-//            }
+            System.out.println("---Обновление информации о книге по её id---");
+            Book bookToUpdate = Book.builder()
+                    .title("Идиот")
+                    .authorId(3)
+                    .publishedYear(2020)
+                    .totalCopies(4)
+                    .build();
+            List<Book> bookList = libraryDao.getAllBooks();
+            if (!bookList.isEmpty()) {
+                libraryDao.updateBookById(4, bookToUpdate);
+                System.out.println("Книга успешно обновлена.");
+            }
 
-//            System.out.println("---Удаление книги по её id---");
-//            if (!bookList.isEmpty()) {
-//                libraryDao.deleteBookById(5);
-//                System.out.println("Книга успешно удалена.");
-//            }
+            System.out.println("---Удаление книги по её id---");
+            if (!bookList.isEmpty()) {
+                libraryDao.deleteBookById(5);
+                System.out.println("Книга успешно удалена.");
+            }
 
             System.out.println("---Добавить книгу и автора в одну транзакцию---");
             libraryDao.addAuthorAndBookTogether(
