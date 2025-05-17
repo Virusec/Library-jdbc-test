@@ -219,7 +219,7 @@ public class LibraryDao {
             preparedStatement.executeUpdate();
         }
     }
-
+//TODO тест
     /**
      * Вызывает хранимую процедуру для добавления автора и книги одновременно.
      *
